@@ -1,0 +1,23 @@
+@startuml
+package "Component1" {
+    [Interface1]
+    [Interface2]
+    [Interface3]
+}
+
+package "Component2" {
+    [Interface4]
+    [Interface5]
+    [Interface6]
+}
+
+package "Group1" {
+    [Component11]
+    [Component21]
+}
+
+Interface1 -- Interface4
+Interface2 -- Interface5
+Interface3 -- Interface6
+
+@enduml
