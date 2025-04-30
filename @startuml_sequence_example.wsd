@@ -1,0 +1,25 @@
+@startuml
+title Sektory zabronione
+actor RMQ as RMQ
+actor CCM 
+actor EDEV 
+actor DETUS 
+actor SSYS 
+
+control     Stations_Control as C1
+boundary    Station_WebSocket as WS1
+control     Data_Control as C2
+boundary    Data_WebSocket as WS2
+participant MAPA as Map
+
+RMQ -> CCM 
+CCM -> CCM:   (powiadomienie dla operatora)
+RMQ -> EDEV : (żądanie ustawienia sektora)
+activate EDEV
+EDEV -> DETUS : (ustawienie "Blank Angle Ranges")
+EDEV -> RMQ  : (diagnostyka potwierdzająca ustawienie: zakres i fakt włączenia)
+RMQ -> SSYS : (odbiór zmodyfikowanego komunikatu diagnostycznego)
+SSYS -> RMQ : (wysłanie zmodyfikowanego komunikatu diagnostycznego z DETUS)
+RMQ -> CCM :  (wizualizacja włączenia zakresu na ekranie - np. kwadrat)
+
+@enduml
