@@ -1,0 +1,88 @@
+@startuml CCMOperatorActivity
+
+|#palegreen|p| Poszukiwanie
+|z| Zadanie
+|#gold|n| Namierzanie
+
+|p|
+group Poszukiwanie 
+start;
+
+:Szukaj
+(obsługuj skan);
+:Twórz zadanie500 
+(z wstepnym filtrem wizualizacji bufora Rf)
+(dodaj do listy zadań);
+
+
+end group 
+
+
+|z|
+group Zadanie500 
+start;
+:Ustaw zadanie na wskazanym Rf zadania
+:Wyswietl liste filtrow wstepnych dla zadania500;
+:Wypelnij bufor na ustawieniach zadania500;
+repeat 
+:Ustaw wstepny filtr Rf 
+(z poszukiwania);
+:Inicjuj kontrolki 
+(widok bufora z filtrem RectangleStereotypeFontColor);
+repeat
+:Obsługuj załadowany bufor;
+repeat while (DodaĆ LDI?) is (No) not (Yes)
+
+:Aktualizuj liste filtrow wstepnych;
+repeat while (Od nowa?) is (Yes) not (No)
+:Dodaj obiekt lokalny;
+
+
+stop;
+
+end group 
+
+
+|n|
+group Namierzanie 
+start;
+
+:Wyswietl liste obiektów lokalnych;
+:aktualizuj bufor dla obiektu lokalnego 
+(po filtrach);
+:Aktualizuj namiar obiektu loklanego 
+(jeśli DF i sa nowe dane);
+
+while (Estymuj OL?)
+:Estymuj 
+(on demand);
+:Rejestruj PDW do pliku;
+endwhile
+
+if (zmienić filtr OL?) then (yes) 
+  else
+  stop;
+endif;
+
+end group 
+
+|z|
+group ZadanieOL
+start;
+
+:Ustaw zadanie na wskazanym Rf z OL
+:Wyswietl filtry OL;
+:Inicjuj kontrolki 
+(widok bufora obiektu lokalnego);
+repeat
+:Obsługuj załadowany bufor;
+if (zmienić filtr OL?) then (yes)
+  :Zmień filtr w liscie filtrow wstepnych;
+endif;
+repeat while (Od nowa?) is (Yes) not (No)
+stop;
+end group 
+
+
+
+@enduml

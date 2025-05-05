@@ -1,0 +1,43 @@
+@startuml GPWTaskSeqence
+participant MazeClient
+participant KafkaBroker
+participant MazeService
+participant FindTraceComputationService
+database Database
+
+
+
+MazeClient -> KafkaBroker: Request1
+MazeClient -> KafkaBroker: RequestN
+
+MazeService -> KafkaBroker: ReadRequestsList
+
+
+activate MazeService
+MazeService -> MazeService: Log: Received requests from Kafka
+
+activate MazeService
+MazeService -> Database: Query DB for Request1
+MazeService -> Database: Query DB for RequestN
+deactivate MazeService
+
+MazeService -> MazeService: Log: Database queries completed
+
+MazeService -> MazeService: Log: Send computation requests
+
+activate MazeService
+MazeService -> FindTraceComputationService: Compute Request
+
+activate FindTraceComputationService
+FindTraceComputationService -> FindTraceComputationService: Log: Received computation requests
+
+FindTraceComputationService --> MazeService: Computation Result for Request1
+deactivate FindTraceComputationService
+MazeService -> MazeService: Log: Computation results received from FindTraceComputationService
+MazeService -> Database: Query DB for Response
+MazeService -> KafkaBroker: Publish Response for RequestsList
+deactivate MazeService
+
+
+deactivate KafkaBroker
+@enduml
